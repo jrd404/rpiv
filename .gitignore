@@ -1,0 +1,7 @@
+bin/
+.DS_Store
+.idea/
+
+# Synced copies for go:embed (canonical source is plugins/ and skills/)
+internal/assets/plugins/
+internal/assets/skills/
