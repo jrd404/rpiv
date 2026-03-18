@@ -1,10 +1,15 @@
 ---
+name: debug.rpi
 description: Debug issues by investigating logs, process state, and git history
+disable-model-invocation: true
 ---
 
 # Debug
 
-You are tasked with helping debug issues during manual testing or implementation. This command allows you to investigate problems by examining logs, process state, and git history without editing files. Think of this as a way to bootstrap a debugging session without using the primary window's context.
+You are tasked with helping debug issues during manual testing or implementation. This command
+allows you to investigate problems by examining logs, process state, and git history without editing
+files. Think of this as a way to bootstrap a debugging session without using the primary window's
+context.
 
 ## Initial Response
 
@@ -51,7 +56,8 @@ After the user describes the issue:
 Before investigating, discover what's available in this project:
 
 1. **Identify the project type and tooling**:
-   - Check for `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `Makefile`, `docker-compose.yml`, etc.
+   - Check for `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `Makefile`,
+     `docker-compose.yml`, etc.
    - Determine what services/processes should be running
 
 2. **Find log locations**:
@@ -70,30 +76,27 @@ Before investigating, discover what's available in this project:
 
 Spawn parallel investigation tasks based on what you discovered:
 
-**Task 1 - Check Recent Logs:**
-Find and analyze the most recent logs for errors:
+**Task 1 - Check Recent Logs:** Find and analyze the most recent logs for errors:
+
 1. Look in discovered log locations
 2. Search for errors, warnings, or stack traces around the problem timeframe
 3. Look for patterns or repeated errors
-4. Check stderr output from running services
-Return: Key errors/warnings with timestamps
+4. Check stderr output from running services Return: Key errors/warnings with timestamps
 
-**Task 2 - Process and Service State:**
-Check the current state of relevant services:
+**Task 2 - Process and Service State:** Check the current state of relevant services:
+
 1. Verify expected processes are running
 2. Check for crashed or zombie processes
 3. Look for port conflicts
-4. Check resource usage (memory, disk) if relevant
-Return: Service health findings
+4. Check resource usage (memory, disk) if relevant Return: Service health findings
 
-**Task 3 - Git and File State:**
-Understand what changed recently:
+**Task 3 - Git and File State:** Understand what changed recently:
+
 1. Check git status and current branch
 2. Look at recent commits: `git log --oneline -10`
 3. Check uncommitted changes: `git diff`
 4. Verify expected files exist
-5. Look for any file permission issues
-Return: Git state and any file issues
+5. Look for any file permission issues Return: Git state and any file issues
 
 ### Step 4: Present Findings
 
@@ -140,7 +143,8 @@ Based on the investigation, present a focused debug report:
 
 ## Important Notes
 
-- **Focus on investigation, not fixing** - This command is for understanding problems, not editing code
+- **Focus on investigation, not fixing** - This command is for understanding problems, not editing
+  code
 - **Always require problem description** - Can't debug without knowing what's wrong
 - **Read files completely** - No limit/offset when reading context
 - **Discover before assuming** - Don't assume log paths or service names; find them
@@ -149,10 +153,8 @@ Based on the investigation, present a focused debug report:
 
 ## Quick Reference
 
-**Find Logs**:
-    # Project-specific logs
-    find . -name "*.log" -mmin -60 2>/dev/null | head -10
-    ls -lt logs/ 2>/dev/null | head -5
+**Find Logs**: # Project-specific logs find . -name "\*.log" -mmin -60 2>/dev/null | head -10 ls -lt
+logs/ 2>/dev/null | head -5
 
     # Docker logs
     docker compose logs --tail=50 2>/dev/null
@@ -160,9 +162,7 @@ Based on the investigation, present a focused debug report:
     # System logs (macOS)
     log show --predicate 'process == "your-process"' --last 30m 2>/dev/null
 
-**Service Check**:
-    # Find project-related processes
-    ps aux | grep -i [project-name]
+**Service Check**: # Find project-related processes ps aux | grep -i [project-name]
 
     # Check listening ports
     lsof -i -P | grep LISTEN
@@ -170,10 +170,7 @@ Based on the investigation, present a focused debug report:
     # Docker services
     docker compose ps 2>/dev/null
 
-**Git State**:
-    git status
-    git log --oneline -10
-    git diff
-    git diff --stat HEAD~5
+**Git State**: git status git log --oneline -10 git diff git diff --stat HEAD~5
 
-Remember: This command helps you investigate without burning the primary window's context. Perfect for when you hit an issue during manual testing and need to dig into logs, processes, or git state.
+Remember: This command helps you investigate without burning the primary window's context. Perfect
+for when you hit an issue during manual testing and need to dig into logs, processes, or git state.

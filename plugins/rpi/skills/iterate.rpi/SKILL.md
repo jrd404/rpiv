@@ -1,11 +1,17 @@
 ---
+name: iterate.rpi
 description: Iterate on existing implementation plans with thorough research and updates
 model: opus
+disable-model-invocation: true
 ---
 
 # Iterate Implementation Plan
 
-You are tasked with updating existing implementation plans based on user feedback. You should be skeptical, thorough, and ensure changes are grounded in actual codebase reality.
+You are tasked with updating existing implementation plans based on user feedback. You should be
+skeptical, thorough, and ensure changes are grounded in actual codebase reality.
+
+**Tracker**: At the start of this workflow, update `docs/.tracker.json` — set the task status to
+`implementing`.
 
 ## Initial Response
 
@@ -18,6 +24,7 @@ When this command is invoked:
 2. **Handle different input scenarios**:
 
    **If NO plan file provided**:
+
    ```
    I'll help you iterate on an existing implementation plan.
 
@@ -25,9 +32,11 @@ When this command is invoked:
 
    Tip: You can list recent plans with `ls -lt docs/plans/ | head`
    ```
+
    Wait for user input, then re-check for feedback.
 
    **If plan file provided but NO feedback**:
+
    ```
    I've found the plan at [path]. What changes would you like to make?
 
@@ -37,6 +46,7 @@ When this command is invoked:
    - "Adjust the scope to exclude feature X"
    - "Split Phase 2 into two separate phases"
    ```
+
    Wait for user input.
 
    **If BOTH plan file AND feedback provided**:
@@ -65,8 +75,7 @@ If the user's feedback requires understanding new code patterns or validating as
 
 1. **Create a research todo list** using TodoWrite
 
-2. **Spawn parallel sub-tasks for research**:
-   Use the right agent for each type of research:
+2. **Spawn parallel sub-tasks for research**: Use the right agent for each type of research:
 
    **For code investigation:**
    - **codebase-locator** - To find relevant files
@@ -126,6 +135,7 @@ Get user confirmation before proceeding.
 ### Step 5: Review
 
 1. **Present the changes made**:
+
    ```
    I've updated the plan at `docs/plans/[filename].md`
 
@@ -213,22 +223,25 @@ When spawning research sub-tasks:
 ## Example Interaction Flows
 
 **Scenario 1: User provides everything upfront**
+
 ```
-User: /iterate docs/plans/2025-10-16_14-30-00_feature.md - add phase for error handling
+User: /rpi:iterate docs/plans/2025-10-16_14-30-00_feature.md - add phase for error handling
 Assistant: [Reads plan, researches error handling patterns, updates plan]
 ```
 
 **Scenario 2: User provides just plan file**
+
 ```
-User: /iterate docs/plans/2025-10-16_14-30-00_feature.md
+User: /rpi:iterate docs/plans/2025-10-16_14-30-00_feature.md
 Assistant: I've found the plan. What changes would you like to make?
 User: Split Phase 2 into two phases - one for backend, one for frontend
 Assistant: [Proceeds with update]
 ```
 
 **Scenario 3: User provides no arguments**
+
 ```
-User: /iterate
+User: /rpi:iterate
 Assistant: Which plan would you like to update? Please provide the path...
 User: docs/plans/2025-10-16_14-30-00_feature.md
 Assistant: I've found the plan. What changes would you like to make?

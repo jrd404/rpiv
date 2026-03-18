@@ -1,15 +1,22 @@
 ---
+name: research.rpi
 description: Research codebase comprehensively using parallel sub-agents
 model: opus
+disable-model-invocation: true
 ---
 
 # Research Codebase
 
-You are tasked with conducting comprehensive research across the codebase to answer user questions by spawning parallel sub-agents and synthesizing their findings.
+You are tasked with conducting comprehensive research across the codebase to answer user questions
+by spawning parallel sub-agents and synthesizing their findings.
+
+**Tracker**: At the start of this workflow, update `docs/.tracker.json` — set the task status to
+`researching`.
 
 ## Initial Setup:
 
 When this command is invoked, respond with:
+
 ```
 I'm ready to research the codebase. Please provide your research question or area of interest, and I'll analyze it thoroughly by exploring relevant components and connections.
 ```
@@ -26,7 +33,8 @@ Then wait for the user's research query.
 
 2. **Analyze and decompose the research question:**
    - Break down the user's query into composable research areas
-   - Take time to ultrathink about the underlying patterns, connections, and architectural implications the user might be seeking
+   - Take time to ultrathink about the underlying patterns, connections, and architectural
+     implications the user might be seeking
    - Identify specific components, patterns, or concepts to investigate
    - Create a research plan using TodoWrite to track all subtasks
    - Consider which directories, files, or architectural patterns are relevant
@@ -36,8 +44,10 @@ Then wait for the user's research query.
 
    The key is to use these agents intelligently:
    - **codebase-locator** - Start with locator agents to find what exists in the codebase
-   - **codebase-analyzer** - Use analyzer agents on the most promising findings to understand implementation details
-   - **codebase-pattern-finder** - Use pattern-finder agents to discover similar patterns and conventions
+   - **codebase-analyzer** - Use analyzer agents on the most promising findings to understand
+     implementation details
+   - **codebase-pattern-finder** - Use pattern-finder agents to discover similar patterns and
+     conventions
    - Run multiple agents in parallel when they're searching for different things
    - Each agent knows its job - just tell it what you're looking for
    - Don't write detailed prompts about HOW to search - the agents already know
@@ -61,6 +71,7 @@ Then wait for the user's research query.
 6. **Generate research document:**
    - Use the metadata gathered in step 5
    - Structure the document with YAML frontmatter followed by content:
+
      ```markdown
      ---
      date: [Current date and time with timezone in ISO format]
@@ -77,39 +88,45 @@ Then wait for the user's research query.
 
      # Research: [User's Question/Topic]
 
-     **Date**: [Current date and time with timezone]
-     **Researcher**: [Researcher name]
-     **Git Commit**: [Current commit hash]
-     **Branch**: [Current branch name]
-     **Repository**: [Repository name]
+     **Date**: [Current date and time with timezone] **Researcher**: [Researcher name] **Git
+     Commit**: [Current commit hash] **Branch**: [Current branch name] **Repository**: [Repository
+     name]
 
      ## Research Question
+
      [Original user query]
 
      ## Summary
+
      [High-level findings answering the user's question]
 
      ## Detailed Findings
 
      ### [Component/Area 1]
+
      - Finding with reference ([file.ext:line](link))
      - Connection to other components
      - Implementation details
 
      ### [Component/Area 2]
+
      ...
 
      ## Code References
+
      - `path/to/file.py:123` - Description of what's there
      - `another/file.ts:45-67` - Description of the code block
 
      ## Architecture Insights
+
      [Patterns, conventions, and design decisions discovered]
 
      ## Related Research
+
      [Links to other research documents in docs/research/]
 
      ## Open Questions
+
      [Any areas that need further investigation]
      ```
 
@@ -134,6 +151,7 @@ Then wait for the user's research query.
    - Continue updating the document
 
 ## Important notes:
+
 - Always use parallel Task agents to maximize efficiency and minimize context usage
 - Always run fresh codebase research - never rely solely on existing research documents
 - Focus on finding concrete file paths and line numbers for developer reference
