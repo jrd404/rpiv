@@ -1,10 +1,10 @@
-# cc
+# rpiv
 
 A CLI for deploying Claude Code plugins across machines and projects.
 
-`cc` packages the **research-plan-implement-validate** workflow as a self-contained Go binary. Run
-`go install` on any machine and deploy the full framework to any project's `.claude/` directory — no
-repo clone needed.
+`rpiv` packages the **rpiv** (Research-Plan-Implement-Validate) workflow as a self-contained Go binary.
+Run `go install` on any machine and deploy the full framework to any project's `.claude/` directory
+— no repo clone needed.
 
 ## Background
 
@@ -18,87 +18,124 @@ The CLI follows the Cobra + hidden `__completer` pattern for dynamic bash tab co
 
 ## What's included
 
-The embedded plugin provides 11 slash commands and 4 specialized sub-agents:
+The embedded plugin provides 12 skills and 4 specialized sub-agents, using the proper Claude Code
+plugin format with `.claude-plugin/plugin.json`. All skills are namespaced as `/rpiv:*`.
 
-**Commands:** `/research`, `/plan`, `/implement`, `/validate`, `/iterate`, `/commit`,
-`/describe-pr`, `/handoff`, `/resume`, `/debug`, `/oneshot`
+**Skills:**
 
-**Agents:** `codebase-locator`, `codebase-analyzer`, `codebase-pattern-finder`, `web-researcher`
+- `/rpiv:research`,
+- `/rpiv:plan`,
+- `/rpiv:implement`,
+- `/rpiv:validate`,
+- `/rpiv:iterate`
+- `/rpiv:commit`,
+- `/rpiv:describe-pr`,
+- `/rpiv:handoff`,
+- `/rpiv:resume`,
+- `/rpiv:debug`,
+- `/rpiv:oneshot`
+- `/rpiv:dashboard`
+
+**Agents:**
+
+- `codebase-locator`
+- `codebase-analyzer`
+- `codebase-pattern-finder`
+- `web-researcher`
+
+**Workflow tracking:** A `PostToolUse` hook auto-updates `docs/.tracker.json` when research docs,
+plans, or handoffs are written. Use `/rpiv:dashboard` to see all active work at a glance.
 
 ## Install
 
 ```bash
-go install github.com/jarrodchung/cc/cmd/cc@latest
+go install github.com/jarrodchung/rpiv/cmd/rpiv@latest
 ```
 
 Or build from source:
 
 ```bash
 make build
-# binary is at bin/cc
+# binary is at bin/rpiv
 ```
 
-f## Usage
+## Usage
 
 ### Deploy the plugin to a project
 
 ```bash
-# Install all commands and agents to the current project
-cc install all
+# Install all skills and agents to the current project
+rpiv install all
 
-# Install only commands (no agents)
-cc install commands
+# Install only skills (no agents)
+rpiv install skills
 
 # Install to your user-level .claude/ directory
-cc install all --scope user
+rpiv install all --scope user
 
 # Preview what would be installed
-cc install all --dry-run
+rpiv install all --dry-run
 ```
 
 ### Manage deployments
 
 ```bash
 # Check status of installed files
-cc status
+rpiv status
 
 # Update to latest embedded versions (skips locally modified files)
-cc update
+rpiv update
 
 # Force-update everything, overwriting local modifications
-cc update --force
+rpiv update --force
 
 # Remove all installed files
-cc uninstall
+rpiv uninstall
 ```
 
 ### Explore what's available
 
 ```bash
-# List available commands
-cc list commands
+# List available skills
+rpiv list skills
 
 # List available agents
-cc list agents
+rpiv list agents
 
 # List available plugins
-cc list plugins
+rpiv list plugins
 ```
 
 ### Tab completion
 
 ```bash
 # Bash — add to .bashrc
-complete -C 'cc __completer' cc
+complete -C 'rpiv __completer' rpiv
 
 # Zsh — generate and install
-cc completion zsh > ~/.zsh/completions/_cc
+rpiv completion zsh > ~/.zsh/completions/_rpiv
 ```
 
 ## How it works
 
-Plugin assets (markdown files defining commands and agents) are embedded into the binary at build
-time via `go:embed`. When you run `cc install`, it copies these files into the target `.claude/`
-directory and writes a `.cc-manifest.json` tracking checksums and versions. Subsequent `cc update`
-and `cc status` commands use the manifest to detect drift, skip locally modified files, and apply
+Plugin assets (skills, agents, hooks, and scripts) are embedded into the binary at build time via
+`go:embed`. When you run `rpiv install`, it copies these files into the target `.claude/` directory
+and writes a `.rpiv-manifest.json` tracking checksums and versions. Subsequent `rpiv update` and
+`rpiv status` commands use the manifest to detect drift, skip locally modified files, and apply
 updates cleanly.
+
+### Plugin format
+
+The rpiv plugin uses the Claude Code plugin format:
+
+```
+plugins/rpiv/
+├── .claude-plugin/plugin.json    # Plugin manifest (name: "rpiv")
+├── skills/*/SKILL.md             # 12 workflow skills
+├── agents/*.md                   # 4 specialized sub-agents
+├── hooks/hooks.json              # PostToolUse hook for tracker
+└── scripts/update-tracker.sh     # Tracker auto-update script
+```
+
+When loaded via `claude --plugin-dir ./plugins/rpiv`, skills are discoverable as `/rpiv:research`,
+`/rpiv:plan`, etc.

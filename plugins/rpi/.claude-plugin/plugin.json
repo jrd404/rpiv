@@ -1,8 +1,0 @@
-{
-  "name": "rpi",
-  "description": "Research-Plan-Implement-Validate workflow framework with parallel sub-agents and workflow state tracking",
-  "version": "0.2.0",
-  "author": {
-    "name": "Jarrod Chung"
-  }
-}

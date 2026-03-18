@@ -1,4 +1,4 @@
-module github.com/jarrodchung/cc
+module github.com/jarrodchung/rpiv
 
 go 1.26.1
 

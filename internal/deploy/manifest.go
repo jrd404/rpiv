@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const ManifestFile = ".cc-manifest.json"
+const ManifestFile = ".rpiv-manifest.json"
 
 type ManifestItem struct {
 	SHA256        string `json:"sha256"`

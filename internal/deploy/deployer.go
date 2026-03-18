@@ -17,13 +17,13 @@ type Deployer struct {
 
 // Asset represents a file to be deployed.
 type Asset struct {
-	// RelPath is relative to the .claude/ directory (e.g., "commands/research.md").
+	// RelPath is relative to the .claude/ directory (e.g., "skills/research/SKILL.md").
 	RelPath string
 	Content []byte
 }
 
 // ListAssets returns all assets for the given plugin and category.
-// category should be "commands", "agents", or "" for all.
+// category should be "skills", "agents", or "" for all.
 func (d *Deployer) ListAssets(category string) ([]Asset, error) {
 	var assets []Asset
 	pluginRoot := filepath.Join("plugins", d.Plugin)
@@ -38,13 +38,24 @@ func (d *Deployer) ListAssets(category string) ([]Asset, error) {
 			return err
 		}
 		if entry.IsDir() {
+			// Skip .claude-plugin metadata directory during deployment
+			if entry.Name() == ".claude-plugin" {
+				return fs.SkipDir
+			}
 			return nil
 		}
-		if !strings.HasSuffix(entry.Name(), ".md") {
+
+		// Deploy .md files, .json files (hooks), and .sh files (scripts)
+		name := entry.Name()
+		deployable := strings.HasSuffix(name, ".md") ||
+			strings.HasSuffix(name, ".json") ||
+			strings.HasSuffix(name, ".sh")
+		if !deployable {
 			return nil
 		}
-		// Skip plugin-level metadata files (only deploy commands/ and agents/ content)
-		if entry.Name() == "PLUGIN.md" {
+
+		// Skip plugin-level metadata files
+		if name == "PLUGIN.md" {
 			return nil
 		}
 
@@ -54,7 +65,7 @@ func (d *Deployer) ListAssets(category string) ([]Asset, error) {
 		}
 
 		// Convert path relative to plugin root into path relative to .claude/
-		// e.g., "plugins/research-plan-implement-validate/commands/research.md" → "commands/research.md"
+		// e.g., "plugins/rpiv/skills/research/SKILL.md" → "skills/research/SKILL.md"
 		relPath, err := filepath.Rel(pluginRoot, path)
 		if err != nil {
 			return fmt.Errorf("rel path: %w", err)
@@ -214,9 +225,22 @@ func (d *Deployer) Uninstall(targetDir string) error {
 	}
 	fmt.Println("  removed: manifest")
 
-	// Try to clean up empty directories
-	for _, subdir := range []string{"commands", "agents"} {
+	// Try to clean up empty directories (skills have nested structure)
+	cleanupDirs := []string{"skills", "agents", "hooks", "scripts"}
+	for _, subdir := range cleanupDirs {
 		dirPath := filepath.Join(targetDir, subdir)
+		// Walk bottom-up to remove empty leaf directories first
+		filepath.WalkDir(dirPath, func(path string, d os.DirEntry, err error) error {
+			if err != nil || !d.IsDir() || path == dirPath {
+				return nil
+			}
+			entries, readErr := os.ReadDir(path)
+			if readErr == nil && len(entries) == 0 {
+				os.Remove(path)
+			}
+			return nil
+		})
+		// Try to remove the top-level directory if now empty
 		entries, err := os.ReadDir(dirPath)
 		if err == nil && len(entries) == 0 {
 			os.Remove(dirPath)

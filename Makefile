@@ -1,5 +1,5 @@
 VERSION ?= dev
-BINARY  := cc
+BINARY  := rpiv
 LDFLAGS := -buildvcs=false -ldflags "-X main.version=$(VERSION)"
 
 .PHONY: build install test lint fmt vet check clean sync-assets
@@ -7,10 +7,10 @@ LDFLAGS := -buildvcs=false -ldflags "-X main.version=$(VERSION)"
 ## Build
 
 build: sync-assets
-	go build $(LDFLAGS) -o bin/$(BINARY) ./cmd/cc
+	go build $(LDFLAGS) -o bin/$(BINARY) ./cmd/rpiv
 
 install: sync-assets
-	go install $(LDFLAGS) ./cmd/cc/
+	go install $(LDFLAGS) ./cmd/rpiv/
 
 ## Sync plugin/skill assets into internal/assets/ for go:embed
 sync-assets:
@@ -36,18 +36,18 @@ check: fmt vet lint test
 ## Completions
 
 completion-bash:
-	@go run $(LDFLAGS) ./cmd/cc/ completion bash
+	@go run $(LDFLAGS) ./cmd/rpiv/ completion bash
 
 completion-zsh:
-	@go run $(LDFLAGS) ./cmd/cc/ completion zsh
+	@go run $(LDFLAGS) ./cmd/rpiv/ completion zsh
 
 install-completions: build
 	@echo "Installing bash completion..."
 	@mkdir -p /etc/bash_completion.d 2>/dev/null || true
-	@cp completions/cc.bash /etc/bash_completion.d/cc 2>/dev/null || echo "  (skipped /etc/bash_completion.d - use 'complete -C cc\\ __completer cc' instead)"
+	@cp completions/rpiv.bash /etc/bash_completion.d/rpiv 2>/dev/null || echo "  (skipped /etc/bash_completion.d - use 'complete -C rpiv\\ __completer rpiv' instead)"
 	@echo "Installing zsh completion..."
 	@mkdir -p ~/.zsh/completions 2>/dev/null || true
-	@cp completions/cc.zsh ~/.zsh/completions/_cc
+	@cp completions/rpiv.zsh ~/.zsh/completions/_rpiv
 
 ## Clean
 
