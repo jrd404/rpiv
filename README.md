@@ -18,23 +18,24 @@ The CLI follows the Cobra + hidden `__completer` pattern for dynamic bash tab co
 
 ## What's included
 
-The embedded plugin provides 12 skills and 4 specialized sub-agents, using the proper Claude Code
-plugin format with `.claude-plugin/plugin.json`. All skills are namespaced as `/rpiv:*`.
+The embedded plugin provides 13 skills and 4 specialized sub-agents, using the proper Claude Code
+plugin format with `.claude-plugin/plugin.json`.
 
 **Skills:**
 
-- `/rpiv:research`,
-- `/rpiv:plan`,
-- `/rpiv:implement`,
-- `/rpiv:validate`,
-- `/rpiv:iterate`
-- `/rpiv:commit`,
-- `/rpiv:describe-pr`,
-- `/rpiv:handoff`,
-- `/rpiv:resume`,
-- `/rpiv:debug`,
-- `/rpiv:oneshot`
-- `/rpiv:dashboard`
+- `/rpiv.init`
+- `/rpiv.research`
+- `/rpiv.plan`
+- `/rpiv.implement`
+- `/rpiv.validate`
+- `/rpiv.iterate`
+- `/rpiv.commit`
+- `/rpiv.pr`
+- `/rpiv.handoff`
+- `/rpiv.resume`
+- `/rpiv.debug`
+- `/rpiv.oneshot`
+- `/rpiv.status`
 
 **Agents:**
 
@@ -44,7 +45,7 @@ plugin format with `.claude-plugin/plugin.json`. All skills are namespaced as `/
 - `web-researcher`
 
 **Workflow tracking:** A `PostToolUse` hook auto-updates `docs/.tracker.json` when research docs,
-plans, or handoffs are written. Use `/rpiv:dashboard` to see all active work at a glance.
+plans, or handoffs are written. Use `/rpiv.status` to see all active work at a glance.
 
 ## Install
 
@@ -131,11 +132,10 @@ The rpiv plugin uses the Claude Code plugin format:
 ```
 plugins/rpiv/
 ├── .claude-plugin/plugin.json    # Plugin manifest (name: "rpiv")
-├── skills/*/SKILL.md             # 12 workflow skills
+├── skills/*/SKILL.md             # 13 workflow skills
 ├── agents/*.md                   # 4 specialized sub-agents
 ├── hooks/hooks.json              # PostToolUse hook for tracker
 └── scripts/update-tracker.sh     # Tracker auto-update script
 ```
 
-When loaded via `claude --plugin-dir ./plugins/rpiv`, skills are discoverable as `/rpiv:research`,
-`/rpiv:plan`, etc.
+When installed, skills are invocable as `/rpiv.research`, `/rpiv.plan`, etc.

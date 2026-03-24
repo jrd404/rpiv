@@ -100,7 +100,7 @@ func listAssets(category string) error {
 	if (category == "" || category == "skills") && len(skills) > 0 {
 		fmt.Println("Skills:")
 		for _, s := range skills {
-			fmt.Printf("  /rpiv:%s\n", s)
+			fmt.Printf("  /%s\n", s)
 		}
 	}
 

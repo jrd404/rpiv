@@ -1,5 +1,5 @@
 ---
-name: commit.rpiv
+name: rpiv.commit
 description: Create git commits with user approval and no Claude attribution
 disable-model-invocation: true
 ---

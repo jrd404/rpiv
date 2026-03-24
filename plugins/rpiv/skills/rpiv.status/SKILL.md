@@ -1,10 +1,10 @@
 ---
-name: dashboard.rpiv
+name: rpiv.status
 description: Display workflow state from docs/.tracker.json for all active tasks
 disable-model-invocation: true
 ---
 
-# Workflow Dashboard
+# Workflow Status
 
 Display the current state of all tracked RPI workflow tasks.
 
@@ -33,17 +33,17 @@ Display the current state of all tracked RPI workflow tasks.
    - Any task not updated in 48+ hours gets a stale warning
 
 5. **Suggest next action per task**:
-   - `research-complete` -> "Run `/rpiv:plan` to create an implementation plan"
-   - `plan-complete` -> "Run `/rpiv:implement <plan-path>` to begin implementation"
-   - `paused` -> "Run `/rpiv:resume <latest-handoff-path>` to continue"
-   - `implementing` -> "Continue implementation or run `/rpiv:handoff` to pause"
-   - `validating` -> "Complete validation or run `/rpiv:commit` when ready"
+   - `research-complete` -> "Run `/rpiv.plan` to create an implementation plan"
+   - `plan-complete` -> "Run `/rpiv.implement <plan-path>` to begin implementation"
+   - `paused` -> "Run `/rpiv.resume <latest-handoff-path>` to continue"
+   - `implementing` -> "Continue implementation or run `/rpiv.handoff` to pause"
+   - `validating` -> "Complete validation or run `/rpiv.commit` when ready"
    - `review` -> "PR is open — merge when approved"
 
 ## Output Format
 
 ```
-## Workflow Dashboard
+## Workflow Status
 
 ### Active
 | Task | Status | Phase | Branch | Last Updated | Next Action |
@@ -53,7 +53,7 @@ Display the current state of all tracked RPI workflow tasks.
 ### Paused
 | Task | Status | Latest Handoff | Last Updated | Next Action |
 |------|--------|---------------|-------------|-------------|
-| API migration | paused | docs/handoffs/2026-03-14_16-30-00_api-migration.md | 3d ago (stale) | `/rpiv:resume docs/handoffs/...` |
+| API migration | paused | docs/handoffs/2026-03-14_16-30-00_api-migration.md | 3d ago (stale) | `/rpiv.resume docs/handoffs/...` |
 
 ### Done
 | Task | Completed | Branch |
@@ -75,16 +75,3 @@ If `docs/.tracker.json` is missing, scan for artifacts to build initial state:
 5. Create `docs/.tracker.json` with inferred state
 6. Inform user: "Bootstrapped tracker from existing artifacts. Review and adjust if needed."
 
-## Status Reference
-
-| Status              | Meaning                    |
-| ------------------- | -------------------------- |
-| `researching`       | Research in progress       |
-| `research-complete` | Research doc written       |
-| `planning`          | Plan in progress           |
-| `plan-complete`     | Plan doc written           |
-| `implementing`      | Implementation in progress |
-| `validating`        | Validation in progress     |
-| `review`            | PR open                    |
-| `done`              | Completed                  |
-| `paused`            | Handoff created            |

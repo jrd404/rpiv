@@ -1,5 +1,5 @@
 ---
-name: implement.rpiv
+name: rpiv.implement
 description: Implement technical plans from docs/plans with verification
 disable-model-invocation: true
 ---
@@ -78,16 +78,6 @@ If instructed to execute multiple phases consecutively, skip the pause until the
 Otherwise, assume you are just doing one phase.
 
 Do not check off items in the manual testing steps until confirmed by the user.
-
-## If You Get Stuck
-
-When something isn't working as expected:
-
-- First, make sure you've read and understood all the relevant code
-- Consider if the codebase has evolved since the plan was written
-- Present the mismatch clearly and ask for guidance
-
-Use sub-tasks sparingly - mainly for targeted debugging or exploring unfamiliar territory.
 
 ## Resuming Work
 

@@ -1,5 +1,5 @@
 ---
-name: oneshot.rpiv
+name: rpiv.oneshot
 description: Quick research task without formal artifacts
 disable-model-invocation: true
 ---
@@ -55,27 +55,3 @@ thorough but concise answer delivered directly in the conversation.
 - **Parallel investigation** - When multiple independent areas need to be checked, investigate them
   in parallel for speed.
 
-## Example
-
-    User: /rpiv:oneshot How does authentication work in this app?
-
-    Assistant: [Searches for auth-related files]
-    [Reads middleware, config, and route handlers]
-    [Checks for auth libraries in dependencies]
-
-    Authentication uses JWT tokens via the express-jwt middleware.
-    Here is how it works:
-
-    1. Login endpoint at src/routes/auth.ts:24 validates credentials
-       against the users table and issues a signed JWT
-    2. The authMiddleware at src/middleware/auth.ts:8 verifies the
-       token on protected routes
-    3. Token refresh is handled by src/routes/auth.ts:55
-
-    Key files:
-    - src/middleware/auth.ts - JWT verification middleware
-    - src/routes/auth.ts - Login, logout, refresh endpoints
-    - src/config/auth.ts - Token expiry and secret config
-
-    Caveat: the refresh token is stored in an HTTP-only cookie, not
-    in the database, so there is no server-side revocation mechanism.

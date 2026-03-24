@@ -1,5 +1,5 @@
 ---
-name: describe-pr.rpiv
+name: rpiv.pr
 description: Generate comprehensive PR descriptions following repository templates
 disable-model-invocation: true
 ---
@@ -79,12 +79,8 @@ standard template.
    - Confirm the update was successful
    - If any verification steps remain unchecked, remind the user to complete them before merging
 
-## Important notes:
+## Important
 
-- This command works across different repositories - always discover the local template
-- Be thorough but concise - descriptions should be scannable
-- Focus on the "why" as much as the "what"
-- Include any breaking changes or migration notes prominently
-- If the PR touches multiple components, organize the description accordingly
-- Always attempt to run verification commands when possible
-- Clearly communicate which verification steps need manual testing
+- Always discover the local PR template — this works across different repositories.
+- Run verification commands when possible. Clearly note which steps need manual testing.
+- Include breaking changes or migration notes prominently.
